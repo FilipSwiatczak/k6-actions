@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "types": ["node"],
+    "target": "ES2020",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "outDir": "./lib",
+    "baseUrl": "./",
+    "paths": {
+      "@k6-actions/*": ["./src/*"]
+    },
+    "include": [
+      "./src"
+    ],
+    "exclude": [
+      "./lib/**/*"
+    ]
+  }
+}

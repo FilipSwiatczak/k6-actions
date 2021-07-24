@@ -1,0 +1,138 @@
+{
+  "name": "@beargineer/k6-actions",
+  "version": "0.0.0",
+  "description": "Actions and journey extension to the k6 Scenarios concept",
+  "bugs": "https://github.com/FilipSwiatczak/k6-actions/issues",
+  "author": "Beargineer",
+  "license": "ISC",
+  "keywords": [
+    "performance",
+    "k6",
+    "beargineer"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "dockerSetup": "docker-compose up -d influxdb grafana",
+    "pretest": "node ./src/scenarioSync.js && webpack",
+    "test": "k6 run ./web/main.js -e",
+    "tsc": "tsc -p ./tsconfig.json",
+    "prepublishOnly": "npm run tsc && webpack",
+    "release": "npx semantic-release",
+    "prepare": "husky install",
+    "postinstall": "node ./src/init.js && npm run tsc"
+  },
+  "files": [
+    "lib/",
+    "src/",
+    "CHANGELOG.md",
+    "tsconfig.json",
+    "webpack.config.js"
+  ],
+  "release": {
+    "ci": false,
+    "dryrun": false,
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits",
+          "releaseRules": [
+            {
+              "type": "docs",
+              "scope": "README",
+              "release": "patch"
+            },
+            {
+              "type": "refactor",
+              "release": "patch"
+            },
+            {
+              "type": "style",
+              "release": "patch"
+            }
+          ],
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES"
+            ]
+          }
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "writerOpts": {
+            "commitSort": [
+              "subject",
+              "scope"
+            ]
+          }
+        }
+      ],
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogTitle": "# Changelog"
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            "CHANGELOG.md",
+            "package.json",
+            "package-lock.json"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "subject-case": [
+        2,
+        "never",
+        [
+          "start-case",
+          "pascal-case"
+        ]
+      ],
+      "body-max-line-length": [
+        0,
+        "always",
+        100
+      ]
+    }
+  },
+  "private": false,
+  "dependencies": {
+    "@babel/core": "7.12.3",
+    "@babel/plugin-proposal-class-properties": "7.12.1",
+    "@babel/plugin-proposal-object-rest-spread": "7.12.1",
+    "@babel/preset-env": "7.12.1",
+    "@babel/preset-typescript": "7.12.1",
+    "@types/webpack": "4.41.24",
+    "babel-loader": "8.1.0",
+    "typescript": "4.3.5",
+    "webpack": "4.44.2",
+    "webpack-cli": "3.3.12"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "12.1.1",
+    "@commitlint/config-conventional": "12.1.1",
+    "@semantic-release/changelog": "5.0.1",
+    "@semantic-release/github": "7.2.3",
+    "@types/k6": "0.32.2",
+    "@types/node": "15.0.1",
+    "glob": "7.1.6",
+    "husky": "6.0.0",
+    "semantic-release": "17.4.2"
+  }
+}
