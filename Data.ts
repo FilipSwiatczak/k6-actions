@@ -14,7 +14,7 @@ class DataO {
         mainName: 'username',
         userAssignment: UserAssignment.PROGRESSIVE
     };
-
+// TODO checking BACKSTAGE READ
     inject(scenarioName: string, vuID: number, iter: number): any {
         const journeyData: any = {...this.dataMap.get(scenarioName)};
         const dataConfig: any = this.scenarioMap.get(scenarioName);
